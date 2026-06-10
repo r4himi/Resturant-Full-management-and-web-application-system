@@ -1,0 +1,115 @@
+{% extends 'dashboard/admin_dashboard.html' %}
+
+{% block title %}BigBurgers | Users Orders{% endblock %}
+
+{% block content %}
+
+<style>
+
+.orders-table-wrapper{
+    background:#fff;
+    padding:20px;
+    border-radius:16px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.08);
+}
+
+.orders-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.orders-table thead{
+    background:#ff4d4d;
+    color:#fff;
+}
+
+.orders-table th,
+.orders-table td{
+    padding:16px;
+    text-align:left;
+    border-bottom:1px solid #eee;
+}
+
+.orders-table tbody tr:hover{
+    background:#f9f9f9;
+}
+
+.user-badge{
+    background:#ffe5e5;
+    color:#ff4d4d;
+    padding:6px 12px;
+    border-radius:8px;
+    font-weight:600;
+}
+
+.view-btn{
+    background:#ff4d4d;
+    color:#fff;
+    padding:8px 14px;
+    border-radius:8px;
+    text-decoration:none;
+    transition:.3s;
+}
+
+.view-btn:hover{
+    background:#e63e3e;
+}
+
+.page-title{
+    margin-bottom:20px;
+    font-size:28px;
+}
+
+</style>
+
+<h1 class="page-title">Users Orders & Payments</h1>
+
+<div class="orders-table-wrapper">
+
+<table class="orders-table">
+
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Total Orders</th>
+            <th>Total Payments</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for data in users_data %}
+        <tr>
+
+            <td>
+                <span class="user-badge">
+                    {{ data.user.username }}
+                </span>
+            </td>
+
+            <td>
+                {{ data.total_orders }}
+            </td>
+
+            <td>
+                ${{ data.total_payments }}
+            </td>
+
+            <td>
+                <a class="view-btn"
+                   href="{% url 'user_orders_admin' data.user.id %}">
+                    View Details
+                </a>
+            </td>
+
+        </tr>
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+</div>
+
+{% endblock %}

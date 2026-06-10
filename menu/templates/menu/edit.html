@@ -1,0 +1,59 @@
+{% extends 'menu/base.html' %}
+{% load static %}
+
+{% block title %}Edit Item | BigBurgers{% endblock %}
+{% block content %}
+
+<div class="add-container">
+  <h2>Edit Item</h2>
+
+  <div class="add-form-container">
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      {{ form.non_field_errors }}
+
+      <div class="input-g-box">
+        {{ form.category.label_tag }}
+        {{ form.category }}
+        {{ form.category.errors }}
+      </div>
+
+      <div class="input-g-box">
+        {{ form.name.label_tag }}
+        {{ form.name }}
+        {{ form.name.errors }}
+      </div>
+
+      <div class="input-g-box">
+        {{ form.price.label_tag }}
+        {{ form.price }}
+        {{ form.price.errors }}
+      </div>
+
+      <div class="input-g-box">
+        <label></label>
+      </div>
+
+      <div >
+        {{ form.image.label_tag }}
+        {{ form.image }}
+      </div>
+
+      <div class="input-g-box">
+        <label></label>
+      </div>
+
+      <div class="input-g-box checkbox-row">
+        {{ form.is_vegetarian }}
+        {{ form.is_vegetarian.label_tag }}
+      </div>
+
+      <div class="edit-submit-btn">
+        <button type="submit">Update</button>
+      </div>
+  </form>
+  <a href="{% url 'menu' %}">Menu</a>
+  </div>
+</div>
+{% endblock %}

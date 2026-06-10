@@ -1,0 +1,171 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Your Cart</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+  </head>
+  <body class="cart-body">
+    
+
+
+
+    <h2>Your Cart🛒</h2>
+    <p>Thanks for choosing US</p>
+
+    <div id="cartItems"></div>
+
+    <h3>Total: $<span id="cartTotal">0.00</span></h3>
+
+    <button class="order-btn" onclick="submitOrder()">Order & Pay</button>
+    <div class="backmenu-btn-back">
+      <a href="{% url 'menu' %}" class="menuback-btn">⬅ Menu</a>
+      <a href="{% url 'orders_page' %}" class="menuback-btn">Order History</a>
+    </div>
+
+    <script>
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function renderCart() {
+
+    const cartItems = document.getElementById("cartItems");
+    const cartTotal = document.getElementById("cartTotal");
+
+    if (!cartItems) return;
+
+    cartItems.innerHTML = "";
+
+    if (cart.length === 0) {
+        cartItems.innerHTML = "<p>Your cart is empty.</p>";
+        cartTotal.innerText = "0.00";
+        return;
+    }
+
+    let total = 0;
+
+    cart.forEach((item, index) => {
+
+        total += item.price * item.quantity;
+
+        cartItems.innerHTML += `
+            <div class="cart-row">
+                <span>${item.name}</span>
+
+                <div>
+                    <button onclick="decrease(${index})">➖</button>
+                    <span>${item.quantity}</span>
+                    <button onclick="increase(${index})">➕</button>
+                </div>
+
+                <span>$${(item.price * item.quantity).toFixed(2)}</span>
+            </div>
+        `;
+    });
+
+    cartTotal.innerText = total.toFixed(2);
+}
+
+function increase(index) {
+    cart[index].quantity++;
+    saveCart();
+    renderCart();
+}
+
+function decrease(index) {
+    if (cart[index].quantity > 1) {
+        cart[index].quantity--;
+    } else {
+        cart.splice(index, 1);
+    }
+    saveCart();
+    renderCart();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    renderCart();
+});
+
+async function submitOrder() {
+
+    let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+    if (cart.length === 0) {
+        alert("Cart is empty");
+        return;
+    }
+
+    // 🔥 VALIDATION (important)
+    for (let item of cart) {
+        if (!item.id) {
+            alert("Cart error: missing item ID");
+            return;
+        }
+    }
+
+    try {
+
+        const response = await fetch("/cart/create-orders/", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+
+            body: JSON.stringify({ cart: cart })
+
+        });
+
+        const text = await response.text();
+
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            console.log("Server response:", text);
+            alert("Server error. Check console.");
+            return;
+        }
+
+        if (!response.ok) {
+            alert(data.error || "Order failed");
+            return;
+        }
+
+        alert(data.message);
+
+        localStorage.removeItem("cart");
+
+        window.location.href = "{% url 'menu' %}";
+
+    } catch (error) {
+        console.log(error);
+        alert("Network error");
+    }
+}
+
+</script>
+</body>
+</html>

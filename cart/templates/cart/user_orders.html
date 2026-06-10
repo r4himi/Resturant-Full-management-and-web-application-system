@@ -1,0 +1,16 @@
+<tr>
+
+    <td>{{ data.user.username }}</td>
+
+    <td>{{ data.total_orders }}</td>
+
+    <td>${{ data.total_payments }}</td>
+
+    <td>
+        <a class="view-btn"
+           href="{% url 'dashboard:users_orders_history' data.user.id %}">
+            Details
+        </a>
+    </td>
+
+</tr>

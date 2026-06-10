@@ -1,0 +1,40 @@
+{% extends 'menu/base.html' %}
+{% load static %}
+
+{% block title %}Home | BigBurgers{% endblock %}
+
+{% block body_class %}{% endblock %}
+
+{% block content %}
+
+<section class="hero-section">
+
+  
+
+  <div id="google_translate_element" style="display:none;"></div>
+
+  <div class="name-solgan-container">
+    <div class="text-solgan-box">
+    <h1 class="the-name">BigBurgers</h1>
+    <h2 class="solgan">Bite into Happiness</h2>
+
+    <div class="category-buttons">
+      {% if user.is_authenticated %}
+        <a href="{% url 'reservation' %}" class="category-btn">
+          Reserve Your Table Now
+        </a>
+      {% else %}
+        <a href="{% url 'login' %}" class="category-btn">
+          Login to Reserve
+        </a>
+      {% endif %}
+    </div>
+    </div>
+
+  </div>
+
+</section>
+
+<script src="{% static 'langScript.js' %}"></script>
+
+{% endblock %}

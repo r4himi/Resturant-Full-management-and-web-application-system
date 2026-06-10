@@ -1,0 +1,115 @@
+{% extends 'menu/base.html' %}
+{% load static %}
+
+{% block title %}Order History | BigBurgers{% endblock %}
+{% block body_class %}menu-body{% endblock %}
+
+{% block extra_css %}
+<style>
+
+.orders-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.order-card {
+    background: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.order-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.order-items li {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.total {
+    margin-top: 10px;
+    font-weight: bold;
+    color: green;
+    text-align: right;
+}
+
+.empty-msg {
+    text-align: center;
+    color: #888;
+    margin-top: 40px;
+    font-size: 1.1rem;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="orders-container">
+
+    <a href="{% url 'menu' %}" class="back-btn">⬅ Back to Menu</a>
+
+    <h2 class="title"> Your Order History</h2>
+
+    {% if orders %}
+
+        {% for order in orders %}
+            <div class="order-card">
+
+                <div class="order-header">
+                   <span>Order #{{ forloop.counter }}</span>
+                    <span>{{ order.created_at|date:"N j, Y" }}</span>
+                </div>
+
+                <ul class="order-items">
+                    {% for item in order.items.all %}
+                        <li>
+                            {{ item.menu_item.name }}
+                            x {{ item.quantity }}
+                            — ${{ item.price }}
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <div class="total">
+                    Total: ${{ order.total_price }}
+                </div>
+
+            </div>
+        {% endfor %}
+
+    {% else %}
+            
+        <p class="empty-msg">You haven't placed any orders yet.</p>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

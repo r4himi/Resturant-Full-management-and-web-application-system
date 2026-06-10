@@ -1,0 +1,53 @@
+{% extends 'menu/base.html' %}
+{% load static %}
+{% block title %}Contact Us|BigBurgers{% endblock %}
+{% block body_class %}contact-body{% endblock %}
+{% block content %}
+
+<div class="contact-box">
+<div class="contact-wrapper">
+
+  <form class="formcontainer" id="contactForm" method="POST" action="{% url 'contact_send' %}">
+  {% csrf_token %}
+
+  <h2>Get in Touch</h2>
+
+  <div class="form-group">
+    <label>Name</label>
+    <input type="text" name="name" id="nameInput" placeholder="Your name..." value="{{ user.username }}" />
+  </div>
+
+  <div class="form-group">
+    <label>Email</label>
+    <input type="email" name="email" id="emailInput" placeholder="Write your email..." value="{{ user.email }}"/>
+  </div>
+
+  <div class="form-group">
+    <label>Message</label>
+    <textarea name="message" rows="5" id="messageInput" placeholder="Write your message..."></textarea>
+  </div>
+
+  <button class="cont-btn" type="submit">Send</button>
+</form>
+
+
+  <div class="map-info-container">
+    <div class="contact-information">
+      <p><strong>🍔Name:</strong> BigBurgers</p>
+      <p><strong>📧Email:</strong> BigBurgers@gmail.com</p>
+      <p><strong>📞Phone:</strong> (93)77733332</p>
+      <p><strong>📍Address:</strong> Kabul, Afghanistan</p>
+    </div>
+
+    <div class="map-container">
+      <iframe
+        src="https://www.google.com/maps?q=Kabul,Afghanistan&z=12&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+</div>
+</div>
+    
+  {% endblock %}

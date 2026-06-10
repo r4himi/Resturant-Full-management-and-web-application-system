@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BigBurgers</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+  </head>
+  <body class="reservation-image">
+    <div class="reservation-container">
+      <form id="reservationForm" class="form-container" action="#" method="POST">
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="Phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" required />
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required />
+
+        <label for="time">Time:</label>
+        <input type="time" id="time" name="time" required />
+
+        <label for="guests">Number of Guests:</label>
+        <input type="number" id="guests" name="guests" min="1" required />
+
+        <button class="category-btn" type="submit" target="_blank">
+          Reserve Now
+        </button>
+        <div class="back-btn">
+          <a href="{% url 'home' %}" class="category-btn">Home Page</a>
+        </div>
+        <input type="hidden" name="restaurant_name" value="BigBurgers" />
+      </form>
+    </div>
+
+    <footer class="footer-container">
+      <div class="brand-name">
+        <h3>BigBurgers</h3>
+        <p>Bite into Happiness</p>
+      </div>
+      <div class="nav-links">
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'menu' %}">Menu</a></li>
+            <li><a href="{% url 'about' %}">About Us</a></li>
+            <li><a href="{% url 'contact' %}">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="contact-info">
+        <p>
+          📧 <a href="mailto:BigBurgers@gmail.com">BigBurgers@gmail.com</a>
+        </p>
+        <p>📞 <a href="tel:(93)77733332">(93)77733332</a></p>
+
+        <p>
+          📍
+          <a
+            href="https://www.google.com/maps/search/?api=1&query=Afghanistan"
+            target="_blank"
+          >
+            Afghanistan
+          </a>
+        </p>
+      </div>
+
+      <div class="social-links">
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">Twitter</a></li>
+        </ul>
+      </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  // Initialize EmailJS with your Public Key
+  emailjs.init("s6oNWtLTP1LKYOerN"); // replace with your EmailJS public key
+</script>
+<script src="{% static 'reservation.js' %}"></script>
+  </body>
+</html>

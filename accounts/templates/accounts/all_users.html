@@ -1,0 +1,52 @@
+{% extends 'dashboard/admin_dashboard.html' %}
+{% load static %}
+
+{% block title %}Customers | BigBurgers{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'customers.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="customers-page-wrapper">
+
+    <div class="customers-header-section">
+        <h2 class="customers-page-title">All Customers</h2>
+    </div>
+
+    <div class="customers-table-wrapper">
+        <table class="customers-data-table">
+
+            <thead class="customers-table-head">
+                <tr>
+                    <th>Id</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Date Joined</th>
+                </tr>
+            </thead>
+
+            <tbody class="customers-table-body">
+                {% for user in users %}
+                <tr class="customers-table-row">
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.date_joined }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="customers-empty-message">
+                        No users found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+{% endblock %}

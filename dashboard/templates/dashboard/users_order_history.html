@@ -1,0 +1,200 @@
+{% extends 'dashboard/admin_dashboard.html' %}
+{% load static %}
+
+{% block title %}Order History | BigBurgers{% endblock %}
+
+{% block extra_css %}
+<style>
+
+/* Main Wrapper */
+
+
+/* Container */
+.user-orders-page .orders-container {
+    max-width: 900px;
+    margin: auto;
+}
+
+/* Title */
+.user-orders-page .title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 30px;
+    font-weight: 700;
+    color: #222;
+}
+
+/* Order Card */
+.user-orders-page .order-card {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    transition: 0.3s ease;
+    border-left: 5px solid #ff6b6b;
+}
+
+.user-orders-page .order-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+}
+
+/* Header */
+.user-orders-page .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Items */
+.user-orders-page .order-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.user-orders-page .order-items li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    color: #555;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Total */
+.user-orders-page .total {
+    margin-top: 15px;
+    text-align: right;
+    font-size: 16px;
+    font-weight: bold;
+    color: green;
+}
+
+/* Empty Message */
+.user-orders-page .empty-msg {
+    text-align: center;
+    color: #777;
+    margin-top: 40px;
+    font-size: 18px;
+}
+
+/* Back Button */
+.user-orders-page .back-btn {
+    display: inline-block;
+    margin-bottom: 25px;
+    text-decoration: none;
+    color: #fff;
+    background: #ff6b6b;
+    padding: 10px 16px;
+    border-radius: 8px;
+    transition: 0.3s ease;
+    font-weight: 500;
+}
+
+.user-orders-page .back-btn:hover {
+    background: #ff6b6b;
+}
+
+/* Main dashboard/page wrapper */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden; /* disable page scroll */
+}
+
+/* Main Wrapper */
+.user-orders-page {
+    height: 100vh;
+    padding: 30px;
+    background: #f5f6fa;
+    display: flex;
+    flex-direction: column; /* IMPORTANT */
+}
+
+/* Scrollable area */
+.user-orders-page .orders-container {
+    max-width: 900px;
+    width: 100%;
+    margin: auto;
+    height: calc(100vh - 60px);
+    flex: 1;              /* IMPORTANT */
+    overflow-y: auto;     /* enables scroll */
+    padding: 0 10px 7rem 10px; 
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="user-orders-page">
+
+    <div class="orders-container">
+
+        <a href="{% url 'admin_all_orders' %}" class="back-btn">
+            ← Back to All Orders
+        </a>
+
+        <h2 class="title">
+             {{ user_data.username }} Order History
+        </h2>
+
+        {% if orders %}
+
+            {% for order in orders %}
+
+                <div class="order-card">
+
+                    <div class="order-header">
+                        <span>Order #{{ forloop.counter }}</span>
+
+                        <span>
+                            {{ order.created_at|date:"M d, Y" }}
+                        </span>
+                    </div>
+
+                    <ul class="order-items">
+
+                        {% for item in order.items.all %}
+
+                            <li>
+                                <span>
+                                    {{ item.menu_item.name }}
+                                    × {{ item.quantity }}
+                                </span>
+
+                                <span>
+                                    ${{ item.price }}
+                                </span>
+                            </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                    <div class="total">
+                        Total: ${{ order.total_price }}
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p class="empty-msg">
+                {{ user_data.username }} hasn't placed any orders yet.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

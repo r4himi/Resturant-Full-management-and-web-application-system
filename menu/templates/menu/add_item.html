@@ -1,0 +1,54 @@
+{% extends 'dashboard/admin_dashboard.html' %}
+{% load static %}
+
+{% block title %}Add Item | BigBurgers{% endblock %}
+
+{% block content %}
+
+<div class="add-container">
+<h2>Add Menu Item</h2>
+
+<div class="add-form-container">
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  {{ form.non_field_errors }}
+
+  <div class="input-g-box">
+    <label>Category</label>
+    {{ form.category }}
+    {{ form.category.errors }}
+  </div>
+
+  <div class="input-g-box">
+    <label>Name</label>
+    {{ form.name }}
+    {{ form.name.errors }}
+  </div>
+
+  <div class="input-g-box">
+    <label>Price</label>
+    {{form.price}}
+    {{ form.price.errors }}
+  </div>
+
+  <div class="input-g-box">
+    <label>Image</label>
+    {{form.image}}
+  </div>
+
+  <div class="input-g-box">
+    <label></label>
+  </div>
+
+  <div class="input-g-box checkbox-row">
+    <label for="id_is_vegetarian">Is Vegetarian</label>
+    {{ form.is_vegetarian }}
+  </div>
+
+  <button class="add-save-item" type="submit">Save</button>
+</form>
+<a href="{% url 'menu' %}">Menu</a>
+</div>
+</div>
+{% endblock %}

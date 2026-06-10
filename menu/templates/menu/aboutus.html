@@ -1,0 +1,39 @@
+{% extends 'menu/base.html' %} 
+{% load static %} 
+{% block title %}About Us|BigBurgers{% endblock %} 
+{% block body_class %}aboutus-background{% endblock %}
+{% block content %}
+<div class="about-image">
+  <img
+    src="{% static 'images/about/outside.jpg' %}"
+    alt="BigBurgers outside view of the Restaurant"
+  />
+</div>
+
+<div class="aboutname">
+  <h1>BigBurgers</h1>
+  <p>
+    At BigBurgers, we believe great food should be bold, fresh, and
+    unforgettable. While our name celebrates big flavor, our menu goes far
+    beyond burgers. From hearty meals to crowd-favorite classics, every dish is
+    prepared with quality ingredients, generous portions, and care. Whether
+    you’re joining us for a full meal or a quick bite, BigBurgers is a place for
+    everyone to enjoy great food together.
+  </p>
+</div>
+
+<div class="images-container">
+  <img
+    src="{% static 'images/about/inner.jpg' %}"
+    alt="photo from the inside of the Restaurant"
+  />
+  <img
+    src="{% static 'images/about/inner1.jpg' %}"
+    alt="photo from the inside of the Restaurant"
+  />
+  <img
+    src="{% static 'images/about/inner2.jpg' %}"
+    alt="photo from the inside of the Restaurant"
+  />
+</div>
+{% endblock %}

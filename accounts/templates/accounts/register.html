@@ -1,0 +1,82 @@
+{% extends 'menu/base.html' %}
+{% load static %}
+{% block title %}Login | BigBurgers{% endblock %}
+
+{% block content %}
+<div class="register-container">
+      <h2>Create Account</h2>
+
+      <form method="POST" class="register-form">
+        {% csrf_token %}
+
+        {% if errors.username %}
+        <p class="error-text">{{ errors.username }}</p>
+      {% endif %}
+
+        <input
+          class="input-groups"
+          type="text"
+          name="username"
+          placeholder="Username"
+          required
+        />
+
+        {% if errors.email %}
+        <p class="error-text">{{ errors.email }}</p>
+      {% endif %}
+
+        <input
+          class="input-g"
+          type="email"
+          name="email"
+          placeholder="Email address"
+          required
+        />
+
+        {% if errors.password1 %}
+        <p class="error-text">{{ errors.password1 }}</p>
+      {% endif %}
+
+        <input
+          class="input-g"
+          type="password"
+          name="password1"
+          placeholder="Password"
+          required
+        />
+
+        {% if errors.password2 %}
+        <p class="error-text">{{ errors.password2 }}</p>
+      {% endif %}
+
+        <input
+          class="input-g"
+          type="password"
+          name="password2"
+          placeholder="Confirm Password"
+          required
+        />
+
+        <div class="checkbox-container">
+          <input
+            class="check-box"
+            type="checkbox"
+            id="accept"
+            name="accept"
+            required
+          />
+          <label for="accept">
+            I agree to the
+            <a href="/terms/">Terms</a> and
+            <a href="/privacy/">Privacy Policy</a>
+          </label>
+        </div>
+
+        <button class="login-btn" type="submit">Register</button>
+      </form>
+
+      <p class="signup-text">
+        Already Have An Account? <a href="{% url 'login' %}">Login</a>
+      </p>
+    </div>
+  {% endblock %}

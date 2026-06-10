@@ -1,0 +1,176 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}BigBurgers{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  {% block extra_css %}{% endblock %}
+</head>
+
+<body class="{% block body_class %}default-body{% endblock %}">
+
+  <!-- NAVBAR -->
+  <nav class="nav-container">
+    <button class="menu-btn" id="burger">☰</button>
+
+    <ul class="nav-list">
+  <li>
+    <a href="{% url 'home' %}"
+       class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+       Home
+    </a>
+  </li>
+
+  <li>
+    <a href="{% url 'menu' %}"
+       class="{% if request.resolver_match.url_name == 'menu' %}active{% endif %}">
+       Menu
+    </a>
+  </li>
+
+  <li>
+    <a href="{% url 'about' %}"
+       class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+       About Us
+    </a>
+  </li>
+
+  <li>
+    <a href="{% url 'contact' %}"
+       class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
+       Contact Us
+    </a>
+  </li>
+
+  {% if user.is_authenticated %}
+    <li>
+      <a href="{% url 'reservation' %}"
+         class="{% if request.resolver_match.url_name == 'reservation' %}active{% endif %}">
+         Reservation
+      </a>
+    </li>
+
+    <li>
+      <a href="{% url 'cart' %}"
+         class="{% if request.resolver_match.url_name == 'cart' %}active{% endif %}">
+          🛒
+      </a>
+    </li>
+
+    {% if user.is_superuser %}
+
+    <li>
+      <a href="{% url 'dashboard:admin_dashboard' %}">Admin Dashboard</a>
+    </li>
+    {% endif %}
+    <li>
+      <a href="{% url 'logout' %}">Logout</a>
+    </li>
+  {% else %}
+    <li>
+      <a href="{% url 'login' %}"
+         class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}">
+         Login
+      </a>
+    </li>
+
+    <li>
+      <a href="{% url 'register' %}"
+         class="{% if request.resolver_match.url_name == 'register' %}active{% endif %}">
+         Register
+      </a>
+    </li>
+  {% endif %}
+</ul>
+    {% if user.is_authenticated %}
+    <div class="prof-icon">
+      <a href="{% url 'profile' %}"><i class="fa-solid fa-circle-user"></i></a>
+    </div>
+    {% endif %}
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="page-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ALERTS -->
+  <div class="alert-messages">
+    {% for message in messages %}
+      {% if message.tags == "success" %}
+        <p class="success-message">{{ message }}</p>
+      {% elif message.tags == "error" %}
+        <p class="failder-message">{{ message }}</p>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+
+
+  <!-- FOOTER -->
+  <footer class="footer-container">
+
+    <div class="footer-brand">
+      <h3>BigBurgers 🍔</h3>
+      <p>Bite into Happiness</p>
+    </div>
+
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'menu' %}">Menu</a></li>
+        <li><a href="{% url 'about' %}">About Us</a></li>
+        <li><a href="{% url 'contact' %}">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Follow Us</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Twitter</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p>📧 <a href="mailto:BigBurgers@gmail.com">BigBurgers@gmail.com</a></p>
+      <p>📞 <a href="tel:+93777333332">+93 777 333 332</a></p>
+    </div>
+  </footer>
+
+  <div class="footer-bottom">
+    <p>© 2026 BigBurgers. All rights reserved.</p>
+    <div class="language-dropdown">
+    <button class="dropbtn" id="langBtn">🌐 Language</button>
+
+    <div class="dropdown-content">
+      <a href="#" onclick="selectLanguage('en','English')">English</a>
+      <a href="#" onclick="selectLanguage('fa','فارسی')">فارسی</a>
+      <a href="#" onclick="selectLanguage('es','Español')">Español</a>
+    </div>
+  </div>
+  </div>
+
+
+  <!-- BURGER MENU SCRIPT -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const menuBtn = document.getElementById("burger");
+      const navList = document.querySelector(".nav-list");
+
+      if (menuBtn && navList) {
+        menuBtn.addEventListener("click", () => {
+          navList.classList.toggle("show");
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>

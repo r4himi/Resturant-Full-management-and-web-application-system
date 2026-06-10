@@ -1,0 +1,242 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}BigBurgers | Admin Dashboard{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'dashboard/dashboard.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body>
+    <div class="dash">
+      <!-- Sidebar -->
+      <div class="side-menu-nav">
+        <h1>Welcome {{ user.username }}</h1>
+
+        <ul class="side-nav">
+          <li>
+            <a class="add-save" href="{% url 'home' %}">
+              <i class="fa-solid fa-house"></i> Home
+            </a>
+          </li>
+
+          <li>
+            <a class="add-save" href="{% url 'dashboard:admin_dashboard' %}">
+              <i class="fa-solid fa-gauge"></i> Dashboard
+            </a>
+          </li>
+
+          <li>
+            <a class="add-save" href="{% url 'admin_all_orders' %}">
+              <i class="fa-solid fa-list"></i> Order List
+            </a>
+          </li>
+
+          <li>
+            <a class="add-save" href="{% url 'all_users' %}">
+              <i class="fa-solid fa-users"></i> Customers
+            </a>
+          </li>
+
+          <li>
+            <a class="add-save" href="{% url 'all_users' %}">
+              <i class="fa-solid fa-motorcycle"></i> Food Delivery
+            </a>
+          </li>
+
+          <li>
+            <a class="add-save" href="{% url 'add' %}">
+              <i class="fa-solid fa-plus"></i> Add Item
+            </a>
+          </li>
+
+          <li>
+            <a class="add-save" href="{% url 'add' %}">
+              <i class="fa-solid fa-wallet"></i> Wallet
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Main Content -->
+      <div class="content-main-blog">
+        {% block content %}
+
+        <div class="stats-wrapper">
+          <!-- Orders Card -->
+          <div class="stats-card">
+            <div class="stats-icon orders">
+              <i class="fa-solid fa-bag-shopping"></i>
+            </div>
+
+            <div class="stats-info">
+              <div class="stats-number">{{ total_orders }}</div>
+
+              <div class="stats-label">Total Orders</div>
+
+              <div class="stats-trend up">
+                <i class="fa-solid fa-arrow-trend-up"></i>
+                <span>{{ orders_trend|floatformat:2 }}%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-card">
+            <div class="stats-icon orders">
+              <i class="fa-solid fa-dollar-sign"></i>
+            </div>
+
+            <div class="stats-info">
+              <div class="stats-number">${{ total_revenue|floatformat:2 }}</div>
+
+              <div class="stats-label">Total Revenue</div>
+
+              <div class="stats-trend up">
+                <i class="fa-solid fa-arrow-trend-up"></i>
+                <span>18%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-card">
+            <div class="stats-icon orders">
+              <i class="fa-duotone fa-solid fa-box"></i>
+            </div>
+
+            <div class="stats-info">
+              <div class="stats-number">58</div>
+
+              <div class="stats-label">Total Delivery</div>
+
+              <div class="stats-trend down">
+                <i class="fa-solid fa-arrow-trend-down"></i>
+                <span>10%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-card">
+            <div class="stats-icon orders">
+              <i class="fa-solid fa-xmark"></i>
+            </div>
+
+            <div class="stats-info">
+              <div class="stats-number">68</div>
+
+              <div class="stats-label">Total Canceled</div>
+
+              <div class="stats-trend down">
+                <i class="fa-solid fa-arrow-trend-down"></i>
+                <span>12%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-card">
+            <div class="stats-icon orders">
+              <i class="fa-solid fa-users"></i>
+            </div>
+
+            <div class="stats-info">
+              <div class="stats-number">{{ top_customers|length }}</div>
+              <div class="stats-label">Top Customers</div>
+              <div class="stats-trend up">
+                <i class="fa-solid fa-arrow-trend-up"></i>
+                <span>18%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-charts-grid">
+          <div class="dashboard-chart-card">
+            <h3 class="dashboard-chart-title">Weekly Orders</h3>
+            <canvas id="ordersChart"></canvas>
+          </div>
+
+          <div class="dashboard-chart-card">
+            <h3 class="dashboard-chart-title">Revenue</h3>
+            <canvas id="revenueChart"></canvas>
+          </div>
+
+          <div class="dashboard-chart-card">                          <!-- NEW -->
+            <h3 class="dashboard-chart-title">New Customers</h3>
+            <canvas id="customersChart"></canvas>
+          </div>
+          <div class="dashboard-chart-card">                          <!-- NEW -->
+            <h3 class="dashboard-chart-title">Top Selling Items</h3>
+            <canvas id="topItemsChart"></canvas>
+          </div>
+        </div>
+        {% endblock %}
+      </div>
+    </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const labels          = {{ chart_labels | safe }};
+      const weeklyOrders    = {{ weekly_orders|safe }};
+      const weeklyRevenue   = {{ weekly_revenue|safe }};
+      const weeklyCustomers = {{ weekly_customers|safe }};
+      const itemLabels      = {{ item_labels|safe }};
+      const itemSales       = {{ item_sales|safe }};
+
+      // 1. Weekly Orders — Line
+      new Chart(document.getElementById('ordersChart'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{ label: 'Orders', data: weeklyOrders,
+            borderColor: '#f97316', backgroundColor: 'rgba(249,115,22,0.15)',
+            fill: true, tension: 0.4 }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+      });
+
+      // 2. Weekly Revenue — Bar
+      new Chart(document.getElementById('revenueChart'), {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{ label: 'Revenue ($)', data: weeklyRevenue,
+            backgroundColor: 'rgba(34,197,94,0.7)', borderRadius: 6 }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+      });
+
+      // 3. New Customers — Line
+      new Chart(document.getElementById('customersChart'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{ label: 'New Customers', data: weeklyCustomers,
+            borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.15)',
+            fill: true, tension: 0.4 }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+      });
+
+      // 4. Top Selling Items — Horizontal Bar
+      new Chart(document.getElementById('topItemsChart'), {
+        type: 'bar',
+        data: {
+          labels: itemLabels,
+          datasets: [{ label: 'Units Sold', data: itemSales,
+            backgroundColor: ['#f97316','#eab308','#22c55e','#3b82f6','#a855f7'],
+            borderRadius: 6 }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          plugins: { legend: { display: false } }
+        }
+      });
+    </script>
+</body>
+</html>
