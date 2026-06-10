@@ -28,7 +28,7 @@ A Django-based restaurant ordering system where customers can browse the menu, a
 
 ```bash
 git clone https://github.com/r4himi/Resturant-Full-management-and-web-application-system.git
-cd bigburgers
+cd Resturant-Full-management-and-web-application-system
 ```
 
 2. Create and activate a virtual environment
